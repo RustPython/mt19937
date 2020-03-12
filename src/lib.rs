@@ -6,7 +6,7 @@
 //! This crate was translated from the original
 //! [implementation](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html)
 //! by a team at Hiroshima University. The original content of the header of
-//! their implementation, along with the license, is left intact below.
+//! their implementation, along with the BSD-3 license, is left intact below.
 //!
 //! # mt19937ar.c header
 
@@ -49,7 +49,9 @@
 
 
    Any feedback is very welcome.
+
    http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
@@ -63,6 +65,7 @@ const MATRIX_A: u32 = 0x9908b0dfu32; /* constant vector a */
 const UPPER_MASK: u32 = 0x80000000u32; /* most significant w-r bits */
 const LOWER_MASK: u32 = 0x7fffffffu32; /* least significant r bits */
 
+/// rand::Rng instance implementing the mt19937 mersenne twister algorithm
 pub struct MT19937 {
     mt: [u32; N], /* the array for the state vector  */
     mti: usize,   /* mti==N+1 means mt[N] is not initialized */
@@ -105,9 +108,9 @@ impl MT19937 {
     }
 
     /** initialize by an array with array-length */
-    /** init_key is the array for initializing keys */
-    /** key_length is its length */
-    /** slight change for C++, 2004/2/26 */
+    /* init_key is the array for initializing keys */
+    /* key_length is its length */
+    /* slight change for C++, 2004/2/26 */
     pub fn seed_slice(&mut self, init_key: &[u32]) {
         let mut i;
         let mut j;
@@ -197,8 +200,9 @@ impl MT19937 {
 }
 
 /** generates a random number on [0,1) with 53-bit resolution*/
+///
 /// This generates a float with the same algorithm that CPython uses; calling
-/// it with an `MT19937` with a given seed returns the same as it would in CPython.
+/// it with an [`MT19937`](struct.MT19937.html) with a given seed returns the same as it would in CPython.
 ///
 /// e.g.:
 /// ```
@@ -216,7 +220,9 @@ impl MT19937 {
 /// (note that CPython converts ints to slices by taking the native endian ordering
 /// of the underlying "BigInt" implementation, but for seeds < u32::max_value(),
 /// just `&[seed]` should be fine.)
+///
 /// Original mt19937ar.c attribution:
+///
 /** These real versions are due to Isaku Wada, 2002/01/09 added */
 pub fn gen_res53<R: rand::RngCore>(rng: &mut R) -> f64 {
     let a = rng.next_u32() >> 5;
@@ -240,8 +246,10 @@ impl rand::RngCore for MT19937 {
     }
 }
 
+/// Seed for <MT19937 as rand::SeedableRng>
+///
 /// Very big seed, but this is the size that CPython uses as well
-pub struct Seed([u32; N]);
+pub struct Seed(pub [u32; N]);
 impl Default for Seed {
     fn default() -> Self {
         Seed([0; N])
