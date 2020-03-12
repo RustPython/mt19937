@@ -1,10 +1,12 @@
 [package]
 name = "mt19937"
-version = "0.1.0"
-authors = ["Noah <33094578+coolreader18@users.noreply.github.com>"]
+version = "1.0.0"
+authors = ["Noah <33094578+coolreader18@users.noreply.github.com>", "RustPython Team"]
 edition = "2018"
-license = "BSD-3-Clause"
+license-file = "LICENSE"
 description = "A translation of the MT19937 Mersenne Twister rng algorithm to Rust"
+documentation = "https://docs.rs/mt19937"
+repository = "https://github.com/RustPython/mt19937"
 
 [dependencies]
 rand_core = "0.5"
