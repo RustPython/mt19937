@@ -1,0 +1,9 @@
+[package]
+name = "mt19937"
+version = "0.1.0"
+authors = ["Noah <33094578+coolreader18@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+rand_core = "0.5"
+rand = "0.7"
