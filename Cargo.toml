@@ -1,6 +1,6 @@
 [package]
 name = "mt19937"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Noah <33094578+coolreader18@users.noreply.github.com>", "RustPython Team"]
 edition = "2018"
 license-file = "LICENSE"
