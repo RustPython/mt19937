@@ -6,7 +6,7 @@ compatible with CPython's `_random` module.
 This crate was translated from the original
 [implementation](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html)
 by a team at Hiroshima University. The original content of the header of
-their implementation, along with the license, is left intact below.
+their implementation, along with the BSD-3 license, is left intact below.
 
 
 A C-program for MT19937, with initialization improved 2002/1/26.
@@ -46,6 +46,6 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-Any feedback is very welcome.
-http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+Any feedback is very welcome.  
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html  
 email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
