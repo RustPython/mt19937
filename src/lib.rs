@@ -126,8 +126,8 @@ impl MT19937 {
         while k != 0 {
             self.mt[i] = (self.mt[i]
                 ^ ((self.mt[i - 1] ^ (self.mt[i - 1] >> 30)).wrapping_mul(1664525u32)))
-                + init_key[j]
-                + j as u32; /* non linear */
+            .wrapping_add(init_key[j])
+            .wrapping_add(j as u32); /* non linear */
             self.mt[i] &= 0xffffffffu32; /* for WORDSIZE > 32 machines */
             i += 1;
             j += 1;
@@ -144,7 +144,7 @@ impl MT19937 {
         while k != 0 {
             self.mt[i] = (self.mt[i]
                 ^ ((self.mt[i - 1] ^ (self.mt[i - 1] >> 30)).wrapping_mul(1566083941u32)))
-                - i as u32; /* non linear */
+            .wrapping_sub(i as u32); /* non linear */
             self.mt[i] &= 0xffffffffu32; /* for WORDSIZE > 32 machines */
             i += 1;
             if i >= N {
