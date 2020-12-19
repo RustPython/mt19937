@@ -9,5 +9,4 @@ documentation = "https://docs.rs/mt19937"
 repository = "https://github.com/RustPython/mt19937"
 
 [dependencies]
-rand_core = "0.5"
-rand = "0.7"
+rand_core = "0.6"

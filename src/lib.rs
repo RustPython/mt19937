@@ -224,13 +224,13 @@ impl MT19937 {
 /// Original mt19937ar.c attribution:
 ///
 /** These real versions are due to Isaku Wada, 2002/01/09 added */
-pub fn gen_res53<R: rand::RngCore>(rng: &mut R) -> f64 {
+pub fn gen_res53<R: rand_core::RngCore>(rng: &mut R) -> f64 {
     let a = rng.next_u32() >> 5;
     let b = rng.next_u32() >> 6;
     (a as f64 * 67108864.0 + b as f64) * (1.0 / 9007199254740992.0)
 }
 
-impl rand::RngCore for MT19937 {
+impl rand_core::RngCore for MT19937 {
     fn next_u32(&mut self) -> u32 {
         self.gen_u32()
     }
@@ -240,13 +240,13 @@ impl rand::RngCore for MT19937 {
     fn fill_bytes(&mut self, dest: &mut [u8]) {
         rand_core::impls::fill_bytes_via_next(self, dest)
     }
-    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), rand::Error> {
+    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), rand_core::Error> {
         self.fill_bytes(dest);
         Ok(())
     }
 }
 
-/// Seed for <MT19937 as rand::SeedableRng>
+/// Seed for <MT19937 as rand_core::SeedableRng>
 ///
 /// Very big seed, but this is the size that CPython uses as well
 pub struct Seed(pub [u32; N]);
@@ -262,7 +262,7 @@ impl AsMut<[u8]> for Seed {
         unsafe { self.0.align_to_mut().1 }
     }
 }
-impl rand::SeedableRng for MT19937 {
+impl rand_core::SeedableRng for MT19937 {
     type Seed = Seed;
     fn from_seed(seed: Self::Seed) -> Self {
         Self::new_with_slice_seed(&seed.0)
