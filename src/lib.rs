@@ -1,4 +1,4 @@
-#![allow(clippy::unreadable_literal)]
+#![allow(clippy::unreadable_literal, clippy::upper_case_acronyms)]
 
 //! An MT19937 Mersenne Twister rng implementation, with the goal of being
 //! compatible with CPython's `_random` module.
@@ -70,12 +70,14 @@ pub struct MT19937 {
     mt: [u32; N], /* the array for the state vector  */
     mti: usize,   /* mti==N+1 means mt[N] is not initialized */
 }
+const MT19937_DEFAULT: MT19937 = MT19937 {
+    mt: [0; N],
+    mti: N + 1,
+};
 impl Default for MT19937 {
+    #[inline]
     fn default() -> Self {
-        MT19937 {
-            mt: [0; N],
-            mti: N + 1,
-        }
+        MT19937_DEFAULT
     }
 }
 impl std::fmt::Debug for MT19937 {
@@ -85,6 +87,7 @@ impl std::fmt::Debug for MT19937 {
 }
 
 impl MT19937 {
+    #[inline]
     pub fn new_with_slice_seed(init_key: &[u32]) -> Self {
         let mut state = Self::default();
         state.seed_slice(init_key);
@@ -231,15 +234,19 @@ pub fn gen_res53<R: rand_core::RngCore>(rng: &mut R) -> f64 {
 }
 
 impl rand_core::RngCore for MT19937 {
+    #[inline]
     fn next_u32(&mut self) -> u32 {
         self.gen_u32()
     }
+    #[inline]
     fn next_u64(&mut self) -> u64 {
         rand_core::impls::next_u64_via_u32(self)
     }
+    #[inline]
     fn fill_bytes(&mut self, dest: &mut [u8]) {
         rand_core::impls::fill_bytes_via_next(self, dest)
     }
+    #[inline]
     fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), rand_core::Error> {
         self.fill_bytes(dest);
         Ok(())
@@ -251,20 +258,22 @@ impl rand_core::RngCore for MT19937 {
 /// Very big seed, but this is the size that CPython uses as well
 pub struct Seed(pub [u32; N]);
 impl Default for Seed {
+    #[inline]
     fn default() -> Self {
         Seed([0; N])
     }
 }
 impl AsMut<[u8]> for Seed {
+    #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
-        // in the rare chance that we aren't aligned well, just ignore it; the
-        // max entropy we could lose is 48 bits
+        // this will always get the full bytes, since align_of(u32) > align_of(u8)
         unsafe { self.0.align_to_mut().1 }
     }
 }
 impl rand_core::SeedableRng for MT19937 {
     type Seed = Seed;
+    #[inline]
     fn from_seed(seed: Self::Seed) -> Self {
-        Self::new_with_slice_seed(&seed.0)
+        Self::new_with_slice_seed(&seed.0[..])
     }
 }
