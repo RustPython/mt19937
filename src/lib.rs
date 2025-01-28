@@ -50,7 +50,7 @@
 
    Any feedback is very welcome.
 
-   http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+   <http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html>
 
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
@@ -59,13 +59,13 @@
 // https://gist.github.com/coolreader18/b56d510f1b0551d2954d74ad289f7d2e
 
 /* Period parameters */
-const N: usize = 624;
+pub const N: usize = 624;
 const M: usize = 397;
 const MATRIX_A: u32 = 0x9908b0dfu32; /* constant vector a */
 const UPPER_MASK: u32 = 0x80000000u32; /* most significant w-r bits */
 const LOWER_MASK: u32 = 0x7fffffffu32; /* least significant r bits */
 
-/// rand::Rng instance implementing the mt19937 mersenne twister algorithm
+/// `rand::Rng` instance implementing the mt19937 mersenne twister algorithm
 pub struct MT19937 {
     mt: [u32; N], /* the array for the state vector  */
     mti: usize,   /* mti==N+1 means mt[N] is not initialized */
@@ -200,12 +200,35 @@ impl MT19937 {
 
         y
     }
+
+    /// Returns the internal state of this rng.
+    pub fn get_state(&self) -> &[u32; N] {
+        &self.mt
+    }
+
+    /// Returns the internal index of this rng.
+    pub fn get_index(&self) -> usize {
+        self.mti
+    }
+
+    /// Set the internal state of this rng.
+    pub fn set_state(&mut self, mt: &[u32; N]) {
+        self.mt = *mt;
+    }
+
+    /// Set the internal index of this rng.
+    ///
+    /// Must be less than or equal to [N].
+    pub fn set_index(&mut self, mti: usize) {
+        assert!(mti <= N);
+        self.mti = mti;
+    }
 }
 
-/** generates a random number on [0,1) with 53-bit resolution*/
+/** generates a random number on `[0,1)` with 53-bit resolution*/
 ///
 /// This generates a float with the same algorithm that CPython uses; calling
-/// it with an [`MT19937`](struct.MT19937.html) with a given seed returns the same as it would in CPython.
+/// it with an [`MT19937`] with a given seed returns the same as it would in CPython.
 ///
 /// e.g.:
 /// ```
@@ -248,7 +271,7 @@ impl rand_core::RngCore for MT19937 {
     }
 }
 
-/// Seed for <MT19937 as rand_core::SeedableRng>
+/// Seed for <code>&lt;[MT19937] as [rand_core::SeedableRng]&gt;::from_seed()</code>
 ///
 /// Very big seed, but this is the size that CPython uses as well
 #[derive(Clone, Copy)]
