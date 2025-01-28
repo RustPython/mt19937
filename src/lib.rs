@@ -246,21 +246,24 @@ impl rand_core::RngCore for MT19937 {
     fn fill_bytes(&mut self, dest: &mut [u8]) {
         rand_core::impls::fill_bytes_via_next(self, dest)
     }
-    #[inline]
-    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), rand_core::Error> {
-        self.fill_bytes(dest);
-        Ok(())
-    }
 }
 
 /// Seed for <MT19937 as rand_core::SeedableRng>
 ///
 /// Very big seed, but this is the size that CPython uses as well
+#[derive(Clone, Copy)]
 pub struct Seed(pub [u32; N]);
 impl Default for Seed {
     #[inline]
     fn default() -> Self {
         Seed([0; N])
+    }
+}
+impl AsRef<[u8]> for Seed {
+    #[inline]
+    fn as_ref(&self) -> &[u8] {
+        // this will always get the full bytes, since align_of(u32) > align_of(u8)
+        unsafe { self.0.align_to().1 }
     }
 }
 impl AsMut<[u8]> for Seed {
