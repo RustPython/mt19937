@@ -83,7 +83,7 @@ impl Default for MT19937 {
 }
 impl core::fmt::Debug for MT19937 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.pad("MT19937")
+        f.debug_struct("MT19937").finish_non_exhaustive()
     }
 }
 
