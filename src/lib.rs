@@ -1,4 +1,5 @@
 #![allow(clippy::unreadable_literal, clippy::upper_case_acronyms)]
+#![no_std]
 
 //! An MT19937 Mersenne Twister rng implementation, with the goal of being
 //! compatible with CPython's `_random` module.
@@ -80,8 +81,8 @@ impl Default for MT19937 {
         MT19937_DEFAULT
     }
 }
-impl std::fmt::Debug for MT19937 {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for MT19937 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.pad("MT19937")
     }
 }
