@@ -251,24 +251,26 @@ impl MT19937 {
 /// Original mt19937ar.c attribution:
 ///
 /** These real versions are due to Isaku Wada, 2002/01/09 added */
-pub fn gen_res53<R: rand_core::RngCore>(rng: &mut R) -> f64 {
+pub fn gen_res53<R: rand_core::Rng>(rng: &mut R) -> f64 {
     let a = rng.next_u32() >> 5;
     let b = rng.next_u32() >> 6;
     (a as f64 * 67108864.0 + b as f64) * (1.0 / 9007199254740992.0)
 }
 
-impl rand_core::RngCore for MT19937 {
+impl rand_core::TryRng for MT19937 {
+    type Error = core::convert::Infallible;
+
     #[inline]
-    fn next_u32(&mut self) -> u32 {
-        self.gen_u32()
+    fn try_next_u32(&mut self) -> Result<u32, Self::Error> {
+        Ok(self.gen_u32())
     }
     #[inline]
-    fn next_u64(&mut self) -> u64 {
-        rand_core::impls::next_u64_via_u32(self)
+    fn try_next_u64(&mut self) -> Result<u64, Self::Error> {
+        rand_core::utils::next_u64_via_u32(self)
     }
     #[inline]
-    fn fill_bytes(&mut self, dest: &mut [u8]) {
-        rand_core::impls::fill_bytes_via_next(self, dest)
+    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Self::Error> {
+        rand_core::utils::fill_bytes_via_next_word(dest, || self.try_next_u64())
     }
 }
 
